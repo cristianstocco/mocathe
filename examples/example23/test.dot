@@ -1,0 +1,38 @@
+digraph g{
+0 [label="[], 0.000
+Samples: [clonal]
+"]
+1 [label="[C], 0.111
+Samples: [cmp3]
+"]
+2 [label="[B], 0.111
+Samples: [cmp2]
+"]
+3 [label="[A], 0.111
+Samples: [cmp1]
+"]
+4 [label="[B, C], 0.222
+Samples: [cmp7, cmp8]
+"]
+5 [label="[A, C], 0.222
+Samples: [cmp5, cmp6]
+"]
+6 [label="[A, B], 0.111
+Samples: [cmp4]
+"]
+7 [label="[A, B, C], 0.111
+Samples: [cmp9]
+"]
+0 -> 1[label="0.375"]
+0 -> 2[label="0.313"]
+0 -> 3[label="0.313"]
+1 -> 4[label="0.500"]
+1 -> 5[label="0.500"]
+2 -> 4[label="0.655"]
+2 -> 6[label="0.345"]
+3 -> 5[label="0.655"]
+3 -> 6[label="0.345"]
+4 -> 7[label="1.000"]
+5 -> 7[label="1.000"]
+6 -> 7[label="1.000"]
+}

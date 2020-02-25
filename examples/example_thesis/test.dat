@@ -1,0 +1,14 @@
+S\G     A   B   C   D
+cmp1    1   0   0   0
+cmp2    1   0   0   0
+cmp3    0   1   0   0
+cmp4    1   1   0   0
+cmp5    1   1   0   0
+cmp6    1   0   1   0
+cmp7    1   0   1   0
+cmp8    1   0   1   0
+cmp9    0   1   0   1
+cmp10   1   1   0   1
+cmp11   1   1   0   1
+cmp12   1   1   1   1
+uk1     0   0   0   1
