@@ -19,6 +19,7 @@ java -cp bin Main.main -dotPathGraph -type -formula -pFormula
 
 with:
 | Param | Type | Description |
+| --- | --- | --- |
 | -dotPathGraph | String | the path of dot graph file |
 | -type | String | type could be repair (-r) or damage&diverge (-d) |
 | -formula | String | therapy formula in DNF mode |
