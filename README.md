@@ -14,7 +14,7 @@ This output, the dotGraph, is used for the input in MOCATHE software and some th
 
 In terminal:
 ```bash
-java -cp bin Main.main -dotPathGraph -type -formula -pFormula
+java -cp bin main/Main -dotPathGraph -type -formula -pFormula
 ```
 
 with:
