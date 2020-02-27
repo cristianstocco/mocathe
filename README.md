@@ -1,6 +1,5 @@
 # MOCATHE (MOdels for CAncer THErapies)
 
-[![Build Status](https://travis-ci.org/peterhry/CircleType.svg?branch=master)](https://travis-ci.org/peterhry/CircleType)
 
 A Java implementation for MOCATHE: a software to inference the tumor evolutions by applying therapy medicines and understanding how it is absorbing to the normal (healty) states. The previous version of this software is CIMICE (https://github.com/redsnic/tumorEvolutionWithMarkovChains).
 
