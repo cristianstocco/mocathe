@@ -73,7 +73,8 @@ public class Graph {
 		
 		//	queuing new vertex and invalidating the graph
 		this.isValid = false;
-		this.missingVertices.add( filter );
+		if( !this.missingVertices.contains(filter) )
+			this.missingVertices.add( filter );
 		return null;
 	}
 	
