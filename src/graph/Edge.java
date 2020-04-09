@@ -11,14 +11,16 @@ public class Edge {
 	private Vertex v1;
 	private Vertex v2;
 	private double weight;
+	private boolean isAdded;
 	
 	/**
 	 * CONSTRUCTOR
 	 */
-	public Edge( Vertex v1, Vertex v2, double weight ) {
+	public Edge( Vertex v1, Vertex v2, double weight, boolean isAdded ) {
 		this.v1 = v1;
 		this.v2 = v2;
 		this.weight = weight;
+		this.isAdded = isAdded;
 	}
 	
 	/**
@@ -49,6 +51,16 @@ public class Edge {
 	 */
 	public double getWeight() {
 		return this.weight;
+	}
+
+	/**
+	 * * * isAdded
+	 * Returns if it is added by activation
+	 * 
+	 * @return boolean			isAdded
+	 */
+	public boolean getIsAdded() {
+		return this.isAdded;
 	}
 
 	/**

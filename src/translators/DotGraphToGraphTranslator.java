@@ -124,7 +124,7 @@ public class DotGraphToGraphTranslator {
 	    	arrivingVertexIndex = Integer.parseInt( edge.substring(arrivingVertexIndexMatcher.start(), arrivingVertexIndexMatcher.end()-1) );
 	    	weight = Double.parseDouble( edge.substring(weightMatcher.start()+1, weightMatcher.end()-1) );
 	    	
-	    	graph.addEdge(graph.findVertex(startingVertexIndex), graph.findVertex(arrivingVertexIndex), weight);
+	    	graph.addEdge(graph.findVertex(startingVertexIndex), graph.findVertex(arrivingVertexIndex), weight, false);
 	    }
 	    //	edge format not compatible
 	    else

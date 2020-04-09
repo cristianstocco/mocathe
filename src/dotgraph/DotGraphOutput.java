@@ -12,6 +12,7 @@ public class DotGraphOutput {
 	private final String GRAPH_FOOTER = "}";
 	private final String VERTEX_FORMAT = "%d [label=\"%s, %.3f\nSamples: [%s]\n\"]\n";
 	private final String EDGE_FORMAT = "%d -> %d[label=\"%.3f\"]\n";
+	private final String ADDED_EDGE_FORMAT = "%d -> %d[label=\"%.3f\", color=blue]\n";
 	private Graph graph;
 	
 	/**
@@ -71,7 +72,10 @@ public class DotGraphOutput {
 		for( int i=0; i<edges.size(); i++ ) {
 			e = edges.get( i );
 			
-			System.out.printf(EDGE_FORMAT, e.getV1().getIndex(), e.getV2().getIndex(), e.getWeight());
+			if( e.getIsAdded() )
+				System.out.printf(ADDED_EDGE_FORMAT, e.getV1().getIndex(), e.getV2().getIndex(), e.getWeight());
+			else
+				System.out.printf(EDGE_FORMAT, e.getV1().getIndex(), e.getV2().getIndex(), e.getWeight());
 		}
 	}
 }

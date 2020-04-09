@@ -26,7 +26,7 @@ public class DatOutput {
 	private final String NEW_VERTEX_GENE = "\t%d";
 	private final String HEADER_PATTERN = "S\\\\G.*";
 	private final String HEADER_PATTERN_GENES = "[^S\\\\G\\s].*";
-	private final String GENE_SEPARATOR = "[\\t ]";
+	private final String GENE_SEPARATOR = "[\\t ]*";
 	private final String NEW_LINE = "\n";
 	private File datDescriptor;
 	private String genesSequence;
@@ -57,7 +57,7 @@ public class DatOutput {
 	 * @return void
 	 */
 	public void writeVertices( List<List<String>> vertices ) {
-		String[] genes = this.genesSequence.split( GENE_SEPARATOR );
+		String[] genes = this.genesSequence.trim().split( GENE_SEPARATOR );
 		int activatingBit;
 		
 		try {
@@ -67,10 +67,11 @@ public class DatOutput {
 			
 				//	writing the activatingBit for the correspondence with genes
 				for( int j=0; j<genes.length; j++ ) {
-					activatingBit = 0;
+					//	skipping empty genes[j]
+					if( genes[j].length() == 0 )
+						continue;
 					
-					if( vertices.get(i).contains(genes[j]) )
-						activatingBit = 1;
+					activatingBit = vertices.get(i).contains(genes[j]) ? 1 : 0;
 					
 					this.datOutput.write( String.format(NEW_VERTEX_GENE, activatingBit) );
 				}

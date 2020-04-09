@@ -51,11 +51,11 @@ public class Graph {
 					arrivalVertex = arrivalVertex(v, f);
 					
 					if( this.isValid )
-						addEdge( v, arrivalVertex, pFormula );
+						addEdge( v, arrivalVertex, pFormula, true );
 				}
 				//	whether the mocathe is Damage or Diverge type
 				else
-					addEdge( v, getFVertex(), pFormula );
+					addEdge( v, getFVertex(), pFormula, true );
 			}
 		}
 	}
@@ -113,7 +113,7 @@ public class Graph {
 		
 		//	adding self-loop to leafs
 		for( int i=0; i<leafs.size(); i++ )
-			addEdge( leafs.get(i), leafs.get(i), LEAF_PROBABILITY );
+			addEdge( leafs.get(i), leafs.get(i), LEAF_PROBABILITY, false );
 	}
 	
 	/**
@@ -255,7 +255,7 @@ public class Graph {
 	 * 
 	 * @return void
 	 */
-	public void addEdge( Vertex v1, Vertex v2, double weight ) {
-		edges.add( new Edge(v1, v2, weight) );
+	public void addEdge( Vertex v1, Vertex v2, double weight, boolean isAdded ) {
+		edges.add( new Edge(v1, v2, weight, isAdded) );
 	}
 }
