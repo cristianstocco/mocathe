@@ -3,6 +3,8 @@ package graph;
 import java.util.ArrayList;
 import java.util.List;
 import formula.Formula;
+import formula.Theta;
+import formula.Varphi;
 
 public class Graph {
 	private final String VERTEX_NOT_FOUND_INDEX = "\n =======>> ERROR <<======="
@@ -145,14 +147,21 @@ public class Graph {
 	private Vertex arrivalVertex( Vertex v, Formula f ) {
 		List<String> labels = v.getLabels();
 		List<String> filter = new ArrayList<String>();
+		Varphi vp;
 		
 		//	copying labels
 		for( int i=0; i<labels.size(); i++ )
 			filter.add( labels.get(i) );
 		
 		//	creating the filter removing thetas
-		for( int i=0; i<f.positiveLiterals().size(); i++ )
-			filter.remove( f.positiveLiterals().get(i).getTheta() );
+		for( int i=0; i<f.getVarphis().size(); i++ ) {
+			vp = f.getVarphis().get( i );
+			
+			if( vp.activates(v) ) {
+				for( int j=0; j<vp.getThetas().size(); j++ )
+					filter.remove( vp.getThetas().get(j).getTheta() );
+			}
+		}
 		
 		return findVertex( filter );
 	}

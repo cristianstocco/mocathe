@@ -6,6 +6,8 @@ package formula;
 import java.util.ArrayList;
 import java.util.List;
 
+import graph.Vertex;
+
 /**
  * @author stykky
  *
@@ -36,6 +38,20 @@ public class Varphi {
 				thetas.add( new Theta(ps[i], false) );
 			else
 				thetas.add( new Theta(ps[i], true) );
+	}
+	
+	/**
+	 * * * activates
+	 * Returns if Varphi activates the Vertex v
+	 * 
+	 * @return boolean			if Varphi activates Vertex v
+	 */
+	public boolean activates(Vertex v) {
+		for( int i=0; i<getThetas().size(); i++ )
+			if( !v.getLabels().contains( getThetas().get(i).getTheta() ) )
+				return false;
+		
+		return true;
 	}
 	
 	/**
