@@ -3,7 +3,6 @@ package graph;
 import java.util.ArrayList;
 import java.util.List;
 import formula.Formula;
-import formula.Theta;
 import formula.Varphi;
 
 public class Graph {
@@ -11,7 +10,9 @@ public class Graph {
 			+ "\n vertex not found by index";
 	private final String F_VERTEX_NOT_FOUND = "\n =======>> ERROR <<======="
 			+ "\n F vertex not found";
+	private final String ROOT_SAMPLES = "clonal";
 	private final double LEAF_PROBABILITY = 1;
+	private Vertex root;
 	private List<Vertex> vertices;
 	private List<Edge> edges;
 	private List<List<String>> missingVertices;
@@ -167,6 +168,52 @@ public class Graph {
 	}
 	
 	/**
+	 * * * addVertex
+	 * Adds a vertex to the graph
+	 * 
+	 * @return void
+	 */
+	public void addVertex( int index, String labels, double probability, String samples ) {
+		System.out.println( "<< creating vertex >>" );
+		System.out.println( "index: " +index );
+		System.out.println( "labels: " +labels );
+		System.out.println( "probability: " +probability );
+		System.out.println( "samples: " +samples );
+		if( labels.length() == 0 && samples.toLowerCase().equals( ROOT_SAMPLES ) ) {
+			System.out.println( "<< << << ROOT VERTEX FOUND >> >> >>" );
+			root = new Vertex(index, labels, probability, samples);
+		}
+		
+		
+		vertices.add( new Vertex(index, labels, probability, samples) );
+	}
+	
+	/**
+	 * * * addVertex
+	 * Adds an edge to the graph
+	 * 
+	 * @return void
+	 */
+	public void addEdge( Vertex v1, Vertex v2, double weight, boolean isAdded ) {
+		System.out.println( "<< creating edge >>" );
+		System.out.println( "v1: " +v1 );
+		System.out.println( "v2: " +v2 );
+		System.out.println( "weight: " +weight );
+		System.out.println( "isAdded: " +isAdded );
+		edges.add( new Edge(v1, v2, weight, isAdded) );
+	}
+	
+	/**
+	 * * * getRoot
+	 * Returns the root vertex
+	 * 
+	 * @return Vertex			root
+	 */
+	public Vertex getRoot() {
+		return this.root;
+	}
+	
+	/**
 	 * * * getVertices
 	 * Returns the graph vertices
 	 * 
@@ -246,25 +293,5 @@ public class Graph {
 	 */
 	public boolean isValid() {
 		return this.isValid;
-	}
-	
-	/**
-	 * * * addVertex
-	 * Adds a vertex to the graph
-	 * 
-	 * @return void
-	 */
-	public void addVertex( int index, String labels, double probability, String samples ) {
-		vertices.add( new Vertex(index, labels, probability, samples) );
-	}
-	
-	/**
-	 * * * addVertex
-	 * Adds an edge to the graph
-	 * 
-	 * @return void
-	 */
-	public void addEdge( Vertex v1, Vertex v2, double weight, boolean isAdded ) {
-		edges.add( new Edge(v1, v2, weight, isAdded) );
 	}
 }

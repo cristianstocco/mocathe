@@ -45,6 +45,7 @@ public class Main {
 		DotGraphInput dotGraphInput = new DotGraphInput( dotGraphPath );
 		Graph graph = new DotGraphToGraphTranslator( dotGraphInput ).getGraph();
 
+		/*
 		//	general settings graph
 		graph.setType( isRepair );
 		graph.addEdgeOnLeaf();
@@ -66,6 +67,7 @@ public class Main {
 			DatOutput dotOutput = new DatOutput( datFilePath );
 			dotOutput.writeVertices( missingVertices );
 		}
+		*/
 	}
 	
 	/**
