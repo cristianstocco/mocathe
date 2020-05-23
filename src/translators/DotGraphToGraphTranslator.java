@@ -62,6 +62,8 @@ public class DotGraphToGraphTranslator {
 	    while( edgeMatcher.find() )
 	    	createEdge( dotGraphContent.substring(edgeMatcher.start(), edgeMatcher.end()) );
 	    
+	    graph.hashTableDebug();
+	    
 	    if( graph.getRoot() == null )
 	    	throw new RuntimeException( ROOT_NOT_FOUND );
 	}

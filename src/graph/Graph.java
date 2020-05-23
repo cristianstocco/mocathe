@@ -2,6 +2,9 @@ package graph;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.StringTokenizer;
+
+import HashTables.HashTable;
 import formula.Formula;
 import formula.Varphi;
 
@@ -12,6 +15,7 @@ public class Graph {
 			+ "\n F vertex not found";
 	private final String ROOT_SAMPLES = "clonal";
 	private final double LEAF_PROBABILITY = 1;
+	private final HashTable hash;
 	private Vertex root;
 	private List<Vertex> vertices;
 	private List<Edge> edges;
@@ -24,6 +28,8 @@ public class Graph {
 	 * CONSTRUCTOR
 	 */
 	public Graph( boolean isDirected ) {
+		this.hash = new HashTable();
+		this.root = null;
 		this.vertices = new ArrayList<Vertex>();
 		this.edges = new ArrayList<Edge>();
 		this.isDirected = isDirected;
@@ -179,13 +185,17 @@ public class Graph {
 		System.out.println( "labels: " +labels );
 		System.out.println( "probability: " +probability );
 		System.out.println( "samples: " +samples );
+		Vertex v = new Vertex(index, labels, probability, samples);
+		int labelsNumber;
 		if( labels.length() == 0 && samples.toLowerCase().equals( ROOT_SAMPLES ) ) {
-			System.out.println( "<< << << ROOT VERTEX FOUND >> >> >>" );
-			root = new Vertex(index, labels, probability, samples);
+			root = v;
+			labelsNumber = 0;
 		}
+		else
+			labelsNumber = labels.split(",").length;
 		
-		
-		vertices.add( new Vertex(index, labels, probability, samples) );
+		hash.addElement( v, labelsNumber );
+		vertices.add( v );
 	}
 	
 	/**
@@ -293,5 +303,15 @@ public class Graph {
 	 */
 	public boolean isValid() {
 		return this.isValid;
+	}
+	
+	/**
+	 * * * hashTableDebug
+	 * Debugs the hash table
+	 * 
+	 * @return void
+	 */
+	public void hashTableDebug() {
+		hash.printHashTable();
 	}
 }
