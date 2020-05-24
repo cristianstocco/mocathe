@@ -23,3 +23,6 @@ with:
 | -type | String | type could be repair (-r) or damage&diverge (-d) |
 | -formula | String | therapy formula in DNF mode |
 | -pFormula | double | probability of the therapy formula |
+
+## Algorithm Improvement
+This section is under developing on the 'backwardpath' branch in order to calculate easily the pointing vertex on created edges while using the DNA Repair Therapy.
