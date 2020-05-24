@@ -45,12 +45,12 @@ public class Main {
 		DotGraphInput dotGraphInput = new DotGraphInput( dotGraphPath );
 		Graph graph = new DotGraphToGraphTranslator( dotGraphInput ).getGraph();
 
-		/*
 		//	general settings graph
 		graph.setType( isRepair );
 		graph.addEdgeOnLeaf();
-		graph.addEdgesAndBalanceFromActivation( f, pFormula );
-		
+		graph.breadthFirstSearch( graph.getRoot(), f );
+		//graph.addEdgesAndBalanceFromActivation( f, pFormula );
+
 		//	print dotGraph
 		if( graph.isValid() ) {
 			DotGraphOutput dotGraphOutput = new DotGraphOutput( graph );
@@ -67,7 +67,6 @@ public class Main {
 			DatOutput dotOutput = new DatOutput( datFilePath );
 			dotOutput.writeVertices( missingVertices );
 		}
-		*/
 	}
 	
 	/**

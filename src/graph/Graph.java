@@ -1,7 +1,9 @@
 package graph;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 import java.util.StringTokenizer;
 
 import HashTables.HashTable;
@@ -35,6 +37,32 @@ public class Graph {
 		this.isDirected = isDirected;
 		this.isValid = true;
 		this.missingVertices = new ArrayList<List<String>>();
+	}
+	
+	/**
+	 * * * addEdgesAndBalanceFromActivation
+	 * Sets the type of the graph
+	 * 
+	 * @return void
+	 */
+	public void breadthFirstSearch( Vertex source, Formula f ) {
+		Vertex v = source;
+		List<Edge> edges = v.getEdges();
+		Queue<Vertex> queue = new LinkedList<Vertex>();
+		
+		queue.add( v );
+		for( int i = 0; i < edges.size(); i++ )
+			queue.add( edges.get(i).getV2() );
+		
+		while( !queue.isEmpty() ) {
+			v = queue.poll();
+			if( v.isActivated(f) ) {
+				System.out.println( " >>>>>>>>>>>>>> vertex "+v.getLabels()+" IS ACTIVATED" );
+			}
+			edges = v.getEdges();
+			for( int i = 0; i < edges.size(); i++ )
+				queue.add( edges.get(i).getV2() );
+		}
 	}
 	
 	/**
@@ -85,20 +113,6 @@ public class Graph {
 		if( !this.missingVertices.contains(filter) )
 			this.missingVertices.add( filter );
 		return null;
-	}
-	
-	/**
-	 * * * findVertex
-	 * Returns the Vertex by the index
-	 * 
-	 * @return Vertex			Vertex (or null)
-	 */
-	public Vertex findVertex( int index ) {
-		for( int i=0; i<vertices.size(); i++ )
-			if( vertices.get(i).getIndex() == index )
-				return vertices.get(i);
-		
-		throw new RuntimeException( VERTEX_NOT_FOUND_INDEX );
 	}
 	
 	/**
@@ -180,11 +194,7 @@ public class Graph {
 	 * @return void
 	 */
 	public void addVertex( int index, String labels, double probability, String samples ) {
-		System.out.println( "<< creating vertex >>" );
-		System.out.println( "index: " +index );
-		System.out.println( "labels: " +labels );
-		System.out.println( "probability: " +probability );
-		System.out.println( "samples: " +samples );
+		System.out.println( "<< creating vertex >>" + " index: " +index+" labels: " +labels+" probability: " +probability + " samples: " +samples );
 		Vertex v = new Vertex(index, labels, probability, samples);
 		int labelsNumber;
 		if( labels.length() == 0 && samples.toLowerCase().equals( ROOT_SAMPLES ) ) {
@@ -202,15 +212,13 @@ public class Graph {
 	 * * * addVertex
 	 * Adds an edge to the graph
 	 * 
-	 * @return void
+	 * @return Edge				added edge
 	 */
-	public void addEdge( Vertex v1, Vertex v2, double weight, boolean isAdded ) {
-		System.out.println( "<< creating edge >>" );
-		System.out.println( "v1: " +v1 );
-		System.out.println( "v2: " +v2 );
-		System.out.println( "weight: " +weight );
-		System.out.println( "isAdded: " +isAdded );
-		edges.add( new Edge(v1, v2, weight, isAdded) );
+	public Edge addEdge( Vertex v1, Vertex v2, double weight, boolean isAdded ) {
+		System.out.println( "<< creating edge >>" + " v1: " +v1 + " v2: " +v2 + " weight: " +weight +" isAdded: " +isAdded );
+		Edge e = new Edge(v1, v2, weight, isAdded);
+		edges.add( e );
+		return e;
 	}
 	
 	/**
@@ -221,6 +229,21 @@ public class Graph {
 	 */
 	public Vertex getRoot() {
 		return this.root;
+	}
+	
+	/**
+	 * * * findVertex
+	 * Returns the Vertex by the index
+	 * 
+	 * @return Vertex			Vertex (or null)
+	 */
+	public Vertex getVertex( int index ) {
+		try {
+			return vertices.get(index);
+		}
+		catch ( IndexOutOfBoundsException error ) {
+			throw new RuntimeException( VERTEX_NOT_FOUND_INDEX );
+		}
 	}
 	
 	/**

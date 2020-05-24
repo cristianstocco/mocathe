@@ -20,6 +20,7 @@ public class Vertex {
 	protected List<String> labels;
 	protected double probability;
 	protected String samples;
+	private List<Edge> edges;
 	
 	/**
 	 * CONSTRUCTOR
@@ -30,6 +31,7 @@ public class Vertex {
 		this.labels = new ArrayList<String>();
 		this.probability = probability;
 		this.samples = samples;
+		this.edges = new ArrayList<Edge>();
 		
 		buildUpLabels( labels );
 	}
@@ -88,6 +90,16 @@ public class Vertex {
 	}
 	
 	/**
+	 * * * linkEdge
+	 * Links an edge to the current edges list
+	 * 
+	 * @return void
+	 */
+	public void addEdge( Edge e ) {
+		edges.add( e );
+	}
+	
+	/**
 	 * * * getIndex
 	 * Returns the index attribute of the vertex
 	 * 
@@ -125,5 +137,15 @@ public class Vertex {
 	 */
 	public String getSamples() {
 		return this.samples;
+	}
+	
+	/**
+	 * * * getEdges
+	 * Returns the edges linked to the current vertex
+	 * 
+	 * @return List<Edge>		linked edges
+	 */
+	public List<Edge> getEdges() {
+		return this.edges;
 	}
 }
