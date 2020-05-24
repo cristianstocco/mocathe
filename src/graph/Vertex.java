@@ -148,4 +148,14 @@ public class Vertex {
 	public List<Edge> getEdges() {
 		return this.edges;
 	}
+	
+	/**
+	 * * * toString
+	 * toString override
+	 * 
+	 * @return List<Edge>		linked edges
+	 */
+	public String toString() {
+		return "__"+getLabels().toString()+"__";
+	}
 }

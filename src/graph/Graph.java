@@ -51,8 +51,6 @@ public class Graph {
 		Queue<Vertex> queue = new LinkedList<Vertex>();
 		
 		queue.add( v );
-		for( int i = 0; i < edges.size(); i++ )
-			queue.add( edges.get(i).getV2() );
 		
 		while( !queue.isEmpty() ) {
 			v = queue.poll();
@@ -194,13 +192,12 @@ public class Graph {
 	 * @return void
 	 */
 	public void addVertex( int index, String labels, double probability, String samples ) {
-		System.out.println( "<< creating vertex >>" + " index: " +index+" labels: " +labels+" probability: " +probability + " samples: " +samples );
 		Vertex v = new Vertex(index, labels, probability, samples);
-		int labelsNumber;
-		if( labels.length() == 0 && samples.toLowerCase().equals( ROOT_SAMPLES ) ) {
-			root = v;
-			labelsNumber = 0;
-		}
+		int labelsNumber = 0;
+		
+		//	root vertex (clonal)
+		if( samples.toLowerCase().equals( ROOT_SAMPLES ) )
+			this.root = v;
 		else
 			labelsNumber = labels.split(",").length;
 		
@@ -215,7 +212,6 @@ public class Graph {
 	 * @return Edge				added edge
 	 */
 	public Edge addEdge( Vertex v1, Vertex v2, double weight, boolean isAdded ) {
-		System.out.println( "<< creating edge >>" + " v1: " +v1 + " v2: " +v2 + " weight: " +weight +" isAdded: " +isAdded );
 		Edge e = new Edge(v1, v2, weight, isAdded);
 		edges.add( e );
 		return e;
