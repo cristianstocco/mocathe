@@ -1,7 +1,7 @@
 /**
  * 
  */
-package HashTables;
+package hashtables;
 
 import java.util.ArrayList;
 import java.util.List;
