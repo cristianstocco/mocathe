@@ -11,8 +11,6 @@ import formula.Varphi;
 public class Graph {
 	private final String VERTEX_NOT_FOUND_INDEX = "\n =======>> ERROR <<======="
 			+ "\n vertex not found by index";
-	private final String F_VERTEX_NOT_FOUND = "\n =======>> ERROR <<======="
-			+ "\n F vertex not found";
 	private final String ROOT_SAMPLES = "clonal";
 	private final double LEAF_PROBABILITY = 1;
 	private final HashTable hash;
@@ -59,7 +57,7 @@ public class Graph {
 			
 			//	checking activation for repair
 			if( v.isActivated(f) && this.isRepair )
-				addFreshRepairEdge( v, pFormula );
+				addFreshRepairEdge( v, f, pFormula );
 			//	checking activation for damage/diverge
 			if( v.isActivated(f) && !this.isRepair )
 				addFreshDamageDivergeEdge( v, pFormula );
@@ -83,10 +81,11 @@ public class Graph {
 	 * 
 	 * @return void
 	 */
-	private void addFreshRepairEdge( Vertex v, double pFormula ) {
-		Vertex arrivalVertex;
+	private void addFreshRepairEdge( Vertex v, Formula f, double pFormula ) {
+		balanceEdges( v, pFormula );
 		
-		arrivalVertex = getFVertex();
+		List<String> filter = getActivationFilter( v, f );
+		Vertex arrivalVertex = hash.findVertex( filter );
 		
 		addEdge( v, arrivalVertex, pFormula, true );
 	}
@@ -98,39 +97,9 @@ public class Graph {
 	 * @return void
 	 */
 	private void addFreshDamageDivergeEdge( Vertex v, double pFormula ) {
-		addEdge( v, getFVertex(), pFormula, true );
-	}
-	
-	/**
-	 * * * addEdgesAndBalanceFromActivation
-	 * Sets the type of the graph
-	 * 
-	 * @return void
-	 */
-	public void addEdgesAndBalanceFromActivation( Formula f, double pFormula ) {
-		List<Vertex> vertices = getVertices();
-		Vertex v;
-		Vertex arrivalVertex;
+		balanceEdges( v, pFormula );
 		
-		//	checking which vertices are being activated
-		for(int i = 0; i < vertices.size(); i++) {
-			v = vertices.get(i);
-			
-			if( v.isActivated( f ) ) {
-				balanceEdges( v, pFormula );
-				
-				//	whether the mocathe is Repair type
-				if( this.isRepair ) {
-					arrivalVertex = arrivalVertex(v, f);
-					
-					if( this.isValid )
-						addEdge( v, arrivalVertex, pFormula, true );
-				}
-				//	whether the mocathe is Damage or Diverge type
-				else
-					addEdge( v, getFVertex(), pFormula, true );
-			}
-		}
+		addEdge( v, getFVertex(), pFormula, true );
 	}
 	
 	/**
@@ -148,6 +117,7 @@ public class Graph {
 		this.isValid = false;
 		if( !this.missingVertices.contains(filter) )
 			this.missingVertices.add( filter );
+		
 		return null;
 	}
 	
@@ -182,26 +152,23 @@ public class Graph {
 	 * @return void
 	 */
 	private void balanceEdges( Vertex v, double pFormula ) {
-		List<Edge> edges = getEdges();
 		double multiplier = 1 - pFormula;
 		Edge e;
 		
-		//	balancing all activated edges
-		for( int i=0; i<edges.size(); i++ ) {
-			e = edges.get( i );
+		for( int i=0; i<v.getEdges().size(); i++ ) {
+			e = v.getEdges().get( i );
 			
-			if( e.getV1().equals(v) )
-				e.setWeight( e.getWeight() * multiplier );
+			e.setWeight( e.getWeight() * multiplier );
 		}
 	}
 	
 	/**
-	 * * * arrivalVertex
-	 * Returns the arrival vertex activated and filtered by formula
+	 * * * getActivationFilter
+	 * Returns the filter for the arrival vertex activated
 	 * 
-	 * @return List<Edge>		graph edges
+	 * @return List<String>		filter
 	 */
-	private Vertex arrivalVertex( Vertex v, Formula f ) {
+	private List<String> getActivationFilter( Vertex v, Formula f ) {
 		List<String> labels = v.getLabels();
 		List<String> filter = new ArrayList<String>();
 		Varphi vp;
@@ -220,7 +187,7 @@ public class Graph {
 			}
 		}
 		
-		return findVertex( filter );
+		return filter;
 	}
 	
 	/**
@@ -247,12 +214,12 @@ public class Graph {
 	 * * * addVertex
 	 * Adds an edge to the graph
 	 * 
-	 * @return Edge				added edge
+	 * @return void
 	 */
-	public Edge addEdge( Vertex v1, Vertex v2, double weight, boolean isAdded ) {
+	public void addEdge( Vertex v1, Vertex v2, double weight, boolean isAdded ) {
 		Edge e = new Edge(v1, v2, weight, isAdded);
 		edges.add( e );
-		return e;
+		v1.addEdge( e );
 	}
 	
 	/**
@@ -353,15 +320,5 @@ public class Graph {
 	 */
 	public boolean isValid() {
 		return this.isValid;
-	}
-	
-	/**
-	 * * * hashTableDebug
-	 * Debugs the hash table
-	 * 
-	 * @return void
-	 */
-	public void hashTableDebug() {
-		hash.printHashTable();
 	}
 }

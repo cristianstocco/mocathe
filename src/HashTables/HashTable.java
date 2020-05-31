@@ -12,7 +12,8 @@ import graph.Vertex;
  *
  */
 public class HashTable {
-	
+	final private static String VERTEX_NOT_FOUND = "\n =======>> ERROR <<======="
+					+ "vertex not found in hash-table, not cached";
 	private List<ArrayList> hashTable;
 	
 	/**
@@ -28,6 +29,7 @@ public class HashTable {
 	 * 
 	 * @return Vertex			root
 	 */
+	@SuppressWarnings("unchecked")
 	public void addElement( Vertex v, int index ) {
 		addSubHashTable( index );
 		ArrayList<Vertex> subTable = hashTable.get( index );
@@ -51,22 +53,24 @@ public class HashTable {
 	}
 	
 	/**
-	 * * * addElement
-	 * Adds an element to the corrispondent hashtable filtered by its dimension
+	 * * * findVertex
+	 * Returns vertex by the filter looking for into the hashtables
 	 * 
-	 * @return Vertex			root
+	 * @return Vertex		arrival vertex
 	 */
-	public void printHashTable() {
-		System.out.println( "DEBUG HASH-TABLE" );
+	@SuppressWarnings("unchecked")
+	public Vertex findVertex( List<String> filter ) {
+		ArrayList<Vertex> vertices = hashTable.get( filter.size() );
+		
 		Vertex v;
-		for( int i = 0; i < hashTable.size(); i++ ) {
-			System.out.println( "PRINTING LISTs with DIMENSION "+i );
-			ArrayList<Vertex> subHashTable = hashTable.get(i);
-			for( int j = 0; j < subHashTable.size(); j++ ) {
-				v = subHashTable.get( j );
-				System.out.println( "the vertex is "+v.getLabels() );
-			}
+		for( int i=0; i < vertices.size(); i++ ) {
+			v = vertices.get( i );
+			
+			if( v.getLabels().equals( filter ) )
+				return v;
 		}
+		
+		throw new RuntimeException( VERTEX_NOT_FOUND );
 	}
 
 }

@@ -64,8 +64,6 @@ public class DotGraphToGraphTranslator {
 	    while( edgeMatcher.find() )
 	    	createEdge( dotGraphContent.substring(edgeMatcher.start(), edgeMatcher.end()) );
 	    
-	    //graph.hashTableDebug();
-	    
 	    if( graph.getRoot() == null )
 	    	throw new RuntimeException( ROOT_NOT_FOUND );
 	}
@@ -133,10 +131,7 @@ public class DotGraphToGraphTranslator {
 	    	arrivingVertexIndex = Integer.parseInt( edge.substring(arrivingVertexIndexMatcher.start(), arrivingVertexIndexMatcher.end()-1) );
 	    	weight = Double.parseDouble( edge.substring(weightMatcher.start()+1, weightMatcher.end()-1) );
 	    	
-	    	Vertex v1 = graph.getVertex(startingVertexIndex);
-	    	Vertex v2 = graph.getVertex(arrivingVertexIndex);
-	    	Edge e = graph.addEdge(v1, v2, weight, false);
-	    	v1.addEdge( e );
+	    	graph.addEdge(graph.getVertex(startingVertexIndex), graph.getVertex(arrivingVertexIndex), weight, false);
 	    }
 	    //	edge format not compatible
 	    else
