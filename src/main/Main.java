@@ -72,6 +72,22 @@ public class Main {
 	}
 	
 	/**
+	 * * * getType
+	 * Returns if the type is repair
+	 * 
+	 * @param String type		arg from runtime execution 
+	 * @return true				validates the repair type
+	 */
+	private static boolean getType( String type ) {
+		if( type.equals(REPAIR_TYPE) )
+			return true;
+		if( type.equals(DAMAGE_DIVERGE_TYPE) )
+			return false;
+		
+		throw new RuntimeException( TYPE_ERROR );
+	}
+	
+	/**
 	 * * * print
 	 * Prints the output or ask for missing vertices
 	 * 
@@ -95,22 +111,6 @@ public class Main {
 			DatOutput dotOutput = new DatOutput( datFilePath );
 			dotOutput.writeVertices( missingVertices );
 		}
-	}
-	
-	/**
-	 * * * getType
-	 * Returns if the type is repair
-	 * 
-	 * @param String type		arg from runtime execution 
-	 * @return true				validates the repair type
-	 */
-	private static boolean getType( String type ) {
-		if( type.equals(REPAIR_TYPE) )
-			return true;
-		if( type.equals(DAMAGE_DIVERGE_TYPE) )
-			return false;
-		
-		throw new RuntimeException( TYPE_ERROR );
 	}
 
 }
