@@ -70,7 +70,8 @@ public class HashTable {
 				return v;
 		}
 		
-		throw new RuntimeException( VERTEX_NOT_FOUND );
+		//	invalidating graph and ask missing vertices
+		return null;
 	}
 
 }

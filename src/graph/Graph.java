@@ -88,7 +88,12 @@ public class Graph {
 		List<String> filter = getActivationFilter( v, f );
 		Vertex arrivalVertex = hash.findVertex( filter );
 		
-		addEdge( v, arrivalVertex, pFormula, true );
+		if( arrivalVertex == null ) {
+			this.isValid = false;
+			this.missingVertices.add( filter );
+		}
+		else
+			addEdge( v, arrivalVertex, pFormula, true );
 	}
 	
 	/**
