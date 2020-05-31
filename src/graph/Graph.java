@@ -43,28 +43,67 @@ public class Graph {
 	 * 
 	 * @return void
 	 */
-	public void breadthFirstSearch( Vertex source, Formula f ) {
+	public void breadthFirstSearch( Vertex source, Formula f, double pFormula ) {
 		Vertex v = source;
 		Vertex vToQueue;
 		List<Edge> edges = v.getEdges();
 		Queue<Vertex> queue = new LinkedList<Vertex>();
 		
+		//	set up queue
 		queue.add( v );
 		
+		setType( false );	////////////////////////////////////////////
+		
+		//	looping for queue vertices
 		while( !queue.isEmpty() ) {
 			v = queue.poll();
-			if( v.isActivated(f) ) {
-				System.out.println( " >>>>>>>>>>>>>> vertex "+v.getLabels()+" IS ACTIVATED" );
+			
+			//	checking activation for repair
+			if( v.isActivated(f) && this.isRepair ) {
+				//System.out.println( " >>>>>>>>>>>>>> vertex "+v.getLabels()+" IS ACTIVATED" );
+				addFreshRepairEdge( v, pFormula );
 			}
+			//	checking activation for damage/diverge
+			if( v.isActivated(f) && !this.isRepair ) {
+				//System.out.println( " >>>>>>>>>>>>>> vertex "+v.getLabels()+" IS ACTIVATED" );
+				addFreshDamageDivergeEdge( v, pFormula );
+			}
+			
+			//	queueing
 			edges = v.getEdges();
 			for( int i = 0; i < edges.size(); i++ ) {
 				vToQueue = edges.get(i).getV2();
+				
 				if( vToQueue.getQueueFresh() ) {
 					queue.add( vToQueue );
 					vToQueue.setQueueFresh( false );
 				}
 			}
 		}
+	}
+	
+	/**
+	 * * * addFreshEdge
+	 * Adds a fresh edge from activation
+	 * 
+	 * @return void
+	 */
+	private void addFreshRepairEdge( Vertex v, double pFormula ) {
+		Vertex arrivalVertex;
+		
+		arrivalVertex = getFVertex();
+		
+		addEdge( v, arrivalVertex, pFormula, true );
+	}
+	
+	/**
+	 * * * addFreshEdge
+	 * Adds a fresh edge from activation
+	 * 
+	 * @return void
+	 */
+	private void addFreshDamageDivergeEdge( Vertex v, double pFormula ) {
+		addEdge( v, getFVertex(), pFormula, true );
 	}
 	
 	/**

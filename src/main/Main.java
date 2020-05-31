@@ -48,7 +48,7 @@ public class Main {
 		//	general settings graph
 		graph.setType( isRepair );
 		graph.addEdgeOnLeaf();
-		graph.breadthFirstSearch( graph.getRoot(), f );
+		graph.breadthFirstSearch( graph.getRoot(), f, pFormula );
 		//graph.addEdgesAndBalanceFromActivation( f, pFormula );
 
 		//	print dotGraph
