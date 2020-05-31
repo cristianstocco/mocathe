@@ -23,29 +23,6 @@ public class Formula {
 	}
 	
 	/**
-	 * * * positiveLiterals
-	 * Returns the Positive Literals attribute
-	 * 
-	 * @return List<Varphi>		positive literals
-	 */
-	public List<Theta> positiveLiterals() {
-		List<Theta> positiveLiterals = new ArrayList<Theta>();
-		List<Theta> thetas;
-		
-		//	cycling over Varphis
-		for( int i=0; i<varphis.size(); i++ ) {
-			thetas = varphis.get(i).getThetas();
-			
-			//	cycling over Thetas to take positive Thetas
-			for( int j=0; j<thetas.size(); j++ )
-				if( thetas.get(j).isPositive() && !positiveLiterals.contains(thetas.get(j)) )
-					positiveLiterals.add( thetas.get(j) );
-		}
-		
-		return positiveLiterals;
-	}
-	
-	/**
 	 * * * buildUpVarphis
 	 * Splits the Formula in Varphis
 	 * 

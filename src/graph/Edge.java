@@ -54,16 +54,6 @@ public class Edge {
 	}
 
 	/**
-	 * * * isAdded
-	 * Returns if it is added by activation
-	 * 
-	 * @return boolean			isAdded
-	 */
-	public boolean getIsAdded() {
-		return this.isAdded;
-	}
-
-	/**
 	 * * * setWright
 	 * Sets the weight
 	 * 
@@ -71,5 +61,15 @@ public class Edge {
 	 */
 	public void setWeight( double weight ) {
 		this.weight = weight;
+	}
+
+	/**
+	 * * * isAdded
+	 * Returns if it is added by activation
+	 * 
+	 * @return boolean			isAdded
+	 */
+	public boolean getIsAdded() {
+		return this.isAdded;
 	}
 }

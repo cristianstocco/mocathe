@@ -52,29 +52,23 @@ public class Graph {
 		//	set up queue
 		queue.add( v );
 		
-		setType( false );	////////////////////////////////////////////
-		
 		//	looping for queue vertices
 		while( !queue.isEmpty() ) {
 			v = queue.poll();
 			
 			//	checking activation for repair
-			if( v.isActivated(f) && this.isRepair ) {
-				//System.out.println( " >>>>>>>>>>>>>> vertex "+v.getLabels()+" IS ACTIVATED" );
+			if( v.isActivated(f) && this.isRepair )
 				addFreshRepairEdge( v, pFormula );
-			}
 			//	checking activation for damage/diverge
-			if( v.isActivated(f) && !this.isRepair ) {
-				//System.out.println( " >>>>>>>>>>>>>> vertex "+v.getLabels()+" IS ACTIVATED" );
+			if( v.isActivated(f) && !this.isRepair )
 				addFreshDamageDivergeEdge( v, pFormula );
-			}
 			
 			//	queueing
 			edges = v.getEdges();
 			for( int i = 0; i < edges.size(); i++ ) {
 				vToQueue = edges.get(i).getV2();
 				
-				if( vToQueue.getQueueFresh() ) {
+				if( vToQueue.isQueueFresh() ) {
 					queue.add( vToQueue );
 					vToQueue.setQueueFresh( false );
 				}

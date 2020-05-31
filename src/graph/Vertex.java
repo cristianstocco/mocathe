@@ -157,7 +157,7 @@ public class Vertex {
 	 * 
 	 * @return boolean			fresh queue
 	 */
-	public boolean getQueueFresh() {
+	public boolean isQueueFresh() {
 		return this.isQueueFresh;
 	}
 	
