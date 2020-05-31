@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
-import java.util.StringTokenizer;
-
 import HashTables.HashTable;
 import formula.Formula;
 import formula.Varphi;
@@ -47,6 +45,7 @@ public class Graph {
 	 */
 	public void breadthFirstSearch( Vertex source, Formula f ) {
 		Vertex v = source;
+		Vertex vToQueue;
 		List<Edge> edges = v.getEdges();
 		Queue<Vertex> queue = new LinkedList<Vertex>();
 		
@@ -58,8 +57,13 @@ public class Graph {
 				System.out.println( " >>>>>>>>>>>>>> vertex "+v.getLabels()+" IS ACTIVATED" );
 			}
 			edges = v.getEdges();
-			for( int i = 0; i < edges.size(); i++ )
-				queue.add( edges.get(i).getV2() );
+			for( int i = 0; i < edges.size(); i++ ) {
+				vToQueue = edges.get(i).getV2();
+				if( vToQueue.getQueueFresh() ) {
+					queue.add( vToQueue );
+					vToQueue.setQueueFresh( false );
+				}
+			}
 		}
 	}
 	

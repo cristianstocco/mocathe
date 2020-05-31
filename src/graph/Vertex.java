@@ -20,6 +20,7 @@ public class Vertex {
 	protected List<String> labels;
 	protected double probability;
 	protected String samples;
+	protected boolean isQueueFresh;
 	private List<Edge> edges;
 	
 	/**
@@ -32,6 +33,7 @@ public class Vertex {
 		this.probability = probability;
 		this.samples = samples;
 		this.edges = new ArrayList<Edge>();
+		this.isQueueFresh = true;
 		
 		buildUpLabels( labels );
 	}
@@ -147,6 +149,26 @@ public class Vertex {
 	 */
 	public List<Edge> getEdges() {
 		return this.edges;
+	}
+	
+	/**
+	 * * * getQueueFresh
+	 * Returns if the vertex is fresh for queueing
+	 * 
+	 * @return boolean			fresh queue
+	 */
+	public boolean getQueueFresh() {
+		return this.isQueueFresh;
+	}
+	
+	/**
+	 * * * setQueueFresh
+	 * Sets if the vertex is fresh for queueing
+	 * 
+	 * @return void
+	 */
+	public boolean setQueueFresh( boolean isFresh ) {
+		return this.isQueueFresh = isFresh;
 	}
 	
 	/**
