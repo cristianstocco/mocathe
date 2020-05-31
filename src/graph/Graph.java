@@ -17,6 +17,7 @@ public class Graph {
 	private final double LEAF_PROBABILITY = 1;
 	private final HashTable hash;
 	private Vertex root;
+	private Vertex fVertex;
 	private List<Vertex> vertices;
 	private List<Edge> edges;
 	private List<List<String>> missingVertices;
@@ -298,8 +299,10 @@ public class Graph {
 	public void setType( boolean isRepair ) {
 		this.isRepair = isRepair;
 		
-		if( !this.isRepair )
-			vertices.add( new FVertex(vertices.size()) );
+		if( !this.isRepair ) {
+			this.fVertex = new FVertex(vertices.size());
+			vertices.add( this.fVertex );
+		}
 	}
 	
 	/**
@@ -319,16 +322,7 @@ public class Graph {
 	 * @return Vertex			FVertex
 	 */
 	public Vertex getFVertex() {
-		Vertex v;
-		
-		//	finding FVertex
-		for( int i=0; i<vertices.size(); i++ ) {
-			v = vertices.get(i);
-			if( v instanceof FVertex )
-				return v;
-		}
-			
-		throw new RuntimeException( F_VERTEX_NOT_FOUND );
+		return this.fVertex;
 	}
 	
 	/**
