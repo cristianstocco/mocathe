@@ -1,17 +1,22 @@
 package graph;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
+
 import formula.Formula;
-import formula.Theta;
 import formula.Varphi;
+import hashtables.HashTable;
 
 public class Graph {
 	private final String VERTEX_NOT_FOUND_INDEX = "\n =======>> ERROR <<======="
 			+ "\n vertex not found by index";
-	private final String F_VERTEX_NOT_FOUND = "\n =======>> ERROR <<======="
-			+ "\n F vertex not found";
+	private final String ROOT_SAMPLES = "clonal";
 	private final double LEAF_PROBABILITY = 1;
+	private final HashTable hash;
+	private Vertex root;
+	private Vertex fVertex;
 	private List<Vertex> vertices;
 	private List<Edge> edges;
 	private List<List<String>> missingVertices;
@@ -23,6 +28,8 @@ public class Graph {
 	 * CONSTRUCTOR
 	 */
 	public Graph( boolean isDirected ) {
+		this.hash = new HashTable();
+		this.root = null;
 		this.vertices = new ArrayList<Vertex>();
 		this.edges = new ArrayList<Edge>();
 		this.isDirected = isDirected;
@@ -36,30 +43,69 @@ public class Graph {
 	 * 
 	 * @return void
 	 */
-	public void addEdgesAndBalanceFromActivation( Formula f, double pFormula ) {
-		List<Vertex> vertices = getVertices();
-		Vertex v;
-		Vertex arrivalVertex;
+	public void breadthFirstSearch( Vertex source, Formula f, double pFormula ) {
+		Vertex v = source;
+		Vertex vToQueue;
+		List<Edge> edges = v.getEdges();
+		Queue<Vertex> queue = new LinkedList<Vertex>();
 		
-		//	checking which vertices are being activated
-		for(int i = 0; i < vertices.size(); i++) {
-			v = vertices.get(i);
+		//	set up queue
+		queue.add( v );
+		
+		//	looping for queue vertices
+		while( !queue.isEmpty() ) {
+			v = queue.poll();
 			
-			if( v.isActivated( f ) ) {
-				balanceEdges( v, pFormula );
+			//	checking activation for repair
+			if( v.isActivated(f) && this.isRepair )
+				addFreshRepairEdge( v, f, pFormula );
+			//	checking activation for damage/diverge
+			if( v.isActivated(f) && !this.isRepair )
+				addFreshDamageDivergeEdge( v, pFormula );
+			
+			//	queueing
+			edges = v.getEdges();
+			for( int i = 0; i < edges.size(); i++ ) {
+				vToQueue = edges.get(i).getV2();
 				
-				//	whether the mocathe is Repair type
-				if( this.isRepair ) {
-					arrivalVertex = arrivalVertex(v, f);
-					
-					if( this.isValid )
-						addEdge( v, arrivalVertex, pFormula, true );
+				if( vToQueue.isQueueFresh() ) {
+					queue.add( vToQueue );
+					vToQueue.setQueueFresh( false );
 				}
-				//	whether the mocathe is Damage or Diverge type
-				else
-					addEdge( v, getFVertex(), pFormula, true );
 			}
 		}
+	}
+	
+	/**
+	 * * * addFreshEdge
+	 * Adds a fresh edge from activation
+	 * 
+	 * @return void
+	 */
+	private void addFreshRepairEdge( Vertex v, Formula f, double pFormula ) {
+		balanceEdges( v, pFormula );
+		
+		List<String> filter = getActivationFilter( v, f );
+		Vertex arrivalVertex = hash.findVertex( filter );
+		
+		if( arrivalVertex == null ) {
+			this.isValid = false;
+			this.missingVertices.add( filter );
+		}
+		else
+			addEdge( v, arrivalVertex, pFormula, true );
+	}
+	
+	/**
+	 * * * addFreshEdge
+	 * Adds a fresh edge from activation
+	 * 
+	 * @return void
+	 */
+	private void addFreshDamageDivergeEdge( Vertex v, double pFormula ) {
+		balanceEdges( v, pFormula );
+		
+		addEdge( v, getFVertex(), pFormula, true );
 	}
 	
 	/**
@@ -77,21 +123,8 @@ public class Graph {
 		this.isValid = false;
 		if( !this.missingVertices.contains(filter) )
 			this.missingVertices.add( filter );
-		return null;
-	}
-	
-	/**
-	 * * * findVertex
-	 * Returns the Vertex by the index
-	 * 
-	 * @return Vertex			Vertex (or null)
-	 */
-	public Vertex findVertex( int index ) {
-		for( int i=0; i<vertices.size(); i++ )
-			if( vertices.get(i).getIndex() == index )
-				return vertices.get(i);
 		
-		throw new RuntimeException( VERTEX_NOT_FOUND_INDEX );
+		return null;
 	}
 	
 	/**
@@ -125,26 +158,23 @@ public class Graph {
 	 * @return void
 	 */
 	private void balanceEdges( Vertex v, double pFormula ) {
-		List<Edge> edges = getEdges();
 		double multiplier = 1 - pFormula;
 		Edge e;
 		
-		//	balancing all activated edges
-		for( int i=0; i<edges.size(); i++ ) {
-			e = edges.get( i );
+		for( int i=0; i<v.getEdges().size(); i++ ) {
+			e = v.getEdges().get( i );
 			
-			if( e.getV1().equals(v) )
-				e.setWeight( e.getWeight() * multiplier );
+			e.setWeight( e.getWeight() * multiplier );
 		}
 	}
 	
 	/**
-	 * * * arrivalVertex
-	 * Returns the arrival vertex activated and filtered by formula
+	 * * * getActivationFilter
+	 * Returns the filter for the arrival vertex activated
 	 * 
-	 * @return List<Edge>		graph edges
+	 * @return List<String>		filter
 	 */
-	private Vertex arrivalVertex( Vertex v, Formula f ) {
+	private List<String> getActivationFilter( Vertex v, Formula f ) {
 		List<String> labels = v.getLabels();
 		List<String> filter = new ArrayList<String>();
 		Varphi vp;
@@ -163,7 +193,64 @@ public class Graph {
 			}
 		}
 		
-		return findVertex( filter );
+		return filter;
+	}
+	
+	/**
+	 * * * addVertex
+	 * Adds a vertex to the graph
+	 * 
+	 * @return void
+	 */
+	public void addVertex( int index, String labels, double probability, String samples ) {
+		Vertex v = new Vertex(index, labels, probability, samples);
+		int labelsNumber = 0;
+		
+		//	root vertex (clonal)
+		if( samples.toLowerCase().equals( ROOT_SAMPLES ) )
+			this.root = v;
+		else
+			labelsNumber = labels.split(",").length;
+		
+		hash.addElement( v, labelsNumber );
+		vertices.add( v );
+	}
+	
+	/**
+	 * * * addVertex
+	 * Adds an edge to the graph
+	 * 
+	 * @return void
+	 */
+	public void addEdge( Vertex v1, Vertex v2, double weight, boolean isAdded ) {
+		Edge e = new Edge(v1, v2, weight, isAdded);
+		edges.add( e );
+		v1.addEdge( e );
+	}
+	
+	/**
+	 * * * getRoot
+	 * Returns the root vertex
+	 * 
+	 * @return Vertex			root
+	 */
+	public Vertex getRoot() {
+		return this.root;
+	}
+	
+	/**
+	 * * * findVertex
+	 * Returns the Vertex by the index
+	 * 
+	 * @return Vertex			Vertex (or null)
+	 */
+	public Vertex getVertex( int index ) {
+		try {
+			return vertices.get(index);
+		}
+		catch ( IndexOutOfBoundsException error ) {
+			throw new RuntimeException( VERTEX_NOT_FOUND_INDEX );
+		}
 	}
 	
 	/**
@@ -185,8 +272,10 @@ public class Graph {
 	public void setType( boolean isRepair ) {
 		this.isRepair = isRepair;
 		
-		if( !this.isRepair )
-			vertices.add( new FVertex(vertices.size()) );
+		if( !this.isRepair ) {
+			this.fVertex = new FVertex(vertices.size());
+			vertices.add( this.fVertex );
+		}
 	}
 	
 	/**
@@ -206,16 +295,7 @@ public class Graph {
 	 * @return Vertex			FVertex
 	 */
 	public Vertex getFVertex() {
-		Vertex v;
-		
-		//	finding FVertex
-		for( int i=0; i<vertices.size(); i++ ) {
-			v = vertices.get(i);
-			if( v instanceof FVertex )
-				return v;
-		}
-			
-		throw new RuntimeException( F_VERTEX_NOT_FOUND );
+		return this.fVertex;
 	}
 	
 	/**
@@ -246,25 +326,5 @@ public class Graph {
 	 */
 	public boolean isValid() {
 		return this.isValid;
-	}
-	
-	/**
-	 * * * addVertex
-	 * Adds a vertex to the graph
-	 * 
-	 * @return void
-	 */
-	public void addVertex( int index, String labels, double probability, String samples ) {
-		vertices.add( new Vertex(index, labels, probability, samples) );
-	}
-	
-	/**
-	 * * * addVertex
-	 * Adds an edge to the graph
-	 * 
-	 * @return void
-	 */
-	public void addEdge( Vertex v1, Vertex v2, double weight, boolean isAdded ) {
-		edges.add( new Edge(v1, v2, weight, isAdded) );
 	}
 }

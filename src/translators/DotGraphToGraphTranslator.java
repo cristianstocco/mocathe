@@ -6,7 +6,9 @@ package translators;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import dotgraph.DotGraphInput;
+import graph.Edge;
 import graph.Graph;
+import graph.Vertex;
 
 /**
  * @author stykky
@@ -17,6 +19,8 @@ public class DotGraphToGraphTranslator {
 			+ "\n vertex matching error";
 	final String EDGE_MATCH_ERROR = "\n =======>> ERROR <<======="
 			+ "\n edge matching error";
+	final String ROOT_NOT_FOUND = "\n =======>> ERROR <<======="
+			+ "\n root not found";
 	final String DIRECTED_GRAPH_PATTERN = "digraph";
 	final String CLONAL_SAMPLES = "clonal";
 	final String VERTEX_PATTERN = "\\d* \\[label=\\\"\\[[a-zA-Z, ]*\\], (\\d\\.\\d*)\\nSamples: \\[[\\w, ]*\\]\\n\\\"\\]";
@@ -59,6 +63,9 @@ public class DotGraphToGraphTranslator {
 	    //	building edges
 	    while( edgeMatcher.find() )
 	    	createEdge( dotGraphContent.substring(edgeMatcher.start(), edgeMatcher.end()) );
+	    
+	    if( graph.getRoot() == null )
+	    	throw new RuntimeException( ROOT_NOT_FOUND );
 	}
 	
 	/**
@@ -124,7 +131,7 @@ public class DotGraphToGraphTranslator {
 	    	arrivingVertexIndex = Integer.parseInt( edge.substring(arrivingVertexIndexMatcher.start(), arrivingVertexIndexMatcher.end()-1) );
 	    	weight = Double.parseDouble( edge.substring(weightMatcher.start()+1, weightMatcher.end()-1) );
 	    	
-	    	graph.addEdge(graph.findVertex(startingVertexIndex), graph.findVertex(arrivingVertexIndex), weight, false);
+	    	graph.addEdge(graph.getVertex(startingVertexIndex), graph.getVertex(arrivingVertexIndex), weight, false);
 	    }
 	    //	edge format not compatible
 	    else

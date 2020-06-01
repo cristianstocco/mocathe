@@ -20,6 +20,8 @@ public class Vertex {
 	protected List<String> labels;
 	protected double probability;
 	protected String samples;
+	protected boolean isQueueFresh;
+	private List<Edge> edges;
 	
 	/**
 	 * CONSTRUCTOR
@@ -30,6 +32,8 @@ public class Vertex {
 		this.labels = new ArrayList<String>();
 		this.probability = probability;
 		this.samples = samples;
+		this.edges = new ArrayList<Edge>();
+		this.isQueueFresh = true;
 		
 		buildUpLabels( labels );
 	}
@@ -88,6 +92,16 @@ public class Vertex {
 	}
 	
 	/**
+	 * * * linkEdge
+	 * Links an edge to the current edges list
+	 * 
+	 * @return void
+	 */
+	public void addEdge( Edge e ) {
+		edges.add( e );
+	}
+	
+	/**
 	 * * * getIndex
 	 * Returns the index attribute of the vertex
 	 * 
@@ -125,5 +139,45 @@ public class Vertex {
 	 */
 	public String getSamples() {
 		return this.samples;
+	}
+	
+	/**
+	 * * * getEdges
+	 * Returns the edges linked to the current vertex
+	 * 
+	 * @return List<Edge>		linked edges
+	 */
+	public List<Edge> getEdges() {
+		return this.edges;
+	}
+	
+	/**
+	 * * * getQueueFresh
+	 * Returns if the vertex is fresh for queueing
+	 * 
+	 * @return boolean			fresh queue
+	 */
+	public boolean isQueueFresh() {
+		return this.isQueueFresh;
+	}
+	
+	/**
+	 * * * setQueueFresh
+	 * Sets if the vertex is fresh for queueing
+	 * 
+	 * @return void
+	 */
+	public boolean setQueueFresh( boolean isFresh ) {
+		return this.isQueueFresh = isFresh;
+	}
+	
+	/**
+	 * * * toString
+	 * toString override
+	 * 
+	 * @return List<Edge>		linked edges
+	 */
+	public String toString() {
+		return "__"+getLabels().toString()+"__";
 	}
 }

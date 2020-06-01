@@ -28,6 +28,11 @@ public class Main {
 
 	/**
 	 * MAIN
+	 * usage: -dotPathGraph -type -formula -pFormula
+	 * -dotPathGraph	String		the path of dot graph file
+	 * -type			String		type could be repair (-r) or damage&diverge (-d)
+	 * -formula			String		therapy formula in DNF mode
+	 * -pFormula		double		probability of the therapy formula
 	 * 
 	 * @param args
 	 */
@@ -48,24 +53,10 @@ public class Main {
 		//	general settings graph
 		graph.setType( isRepair );
 		graph.addEdgeOnLeaf();
-		graph.addEdgesAndBalanceFromActivation( f, pFormula );
-		
-		//	print dotGraph
-		if( graph.isValid() ) {
-			DotGraphOutput dotGraphOutput = new DotGraphOutput( graph );
-			dotGraphOutput.print();
-		}
-		//	need to add vertices into the file
-		else {
-			List<List<String>> missingVertices = graph.getMissingVertices();
-			Scanner readLine = new Scanner(System.in);
-			
-			System.out.format( ADDING_VERTICES_MESSAGE, missingVertices.size() );
-			String datFilePath = readLine.nextLine();
-			
-			DatOutput dotOutput = new DatOutput( datFilePath );
-			dotOutput.writeVertices( missingVertices );
-		}
+		graph.breadthFirstSearch( graph.getRoot(), f, pFormula );
+
+		//	print (or ask for missing vertices)
+		print( graph );
 	}
 	
 	/**
@@ -94,6 +85,32 @@ public class Main {
 			return false;
 		
 		throw new RuntimeException( TYPE_ERROR );
+	}
+	
+	/**
+	 * * * print
+	 * Prints the output or ask for missing vertices
+	 * 
+	 * @return void
+	 */
+	@SuppressWarnings("resource")
+	private static void print( Graph graph ) {
+		//	print dotGraph
+		if( graph.isValid() ) {
+			DotGraphOutput dotGraphOutput = new DotGraphOutput( graph );
+			dotGraphOutput.print();
+		}
+		//	need to add vertices into the file
+		else {
+			List<List<String>> missingVertices = graph.getMissingVertices();
+			Scanner readLine = new Scanner(System.in);
+			
+			System.out.format( ADDING_VERTICES_MESSAGE, missingVertices.size() );
+			String datFilePath = readLine.nextLine();
+			
+			DatOutput dotOutput = new DatOutput( datFilePath );
+			dotOutput.writeVertices( missingVertices );
+		}
 	}
 
 }

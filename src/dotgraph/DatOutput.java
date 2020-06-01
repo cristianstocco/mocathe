@@ -58,7 +58,6 @@ public class DatOutput {
 	 */
 	public void writeVertices( List<List<String>> vertices ) {
 		String[] genes = this.genesSequence.trim().split( GENE_SEPARATOR );
-		int activatingBit;
 		
 		try {
 			//	cycling over vertices
@@ -67,13 +66,7 @@ public class DatOutput {
 			
 				//	writing the activatingBit for the correspondence with genes
 				for( int j=0; j<genes.length; j++ ) {
-					//	skipping empty genes[j]
-					if( genes[j].length() == 0 )
-						continue;
-					
-					activatingBit = vertices.get(i).contains(genes[j]) ? 1 : 0;
-					
-					this.datOutput.write( String.format(NEW_VERTEX_GENE, activatingBit) );
+					writeGene( vertices.get(i), genes[j] );
 				}
 				
 				this.datOutput.write( NEW_LINE );
@@ -82,6 +75,26 @@ public class DatOutput {
 			//	flushes and close the file pointer
 			this.datOutput.flush();
 			this.datOutput.close();
+		} catch (IOException e) {
+			throw new RuntimeException( IO_EXCEPTION_ERROR );
+		}
+	}
+	
+	/**
+	 * * * writeGene
+	 * Writes the gene referring to the current vertex
+	 * 
+	 * @return void
+	 */
+	private void writeGene( List<String> v, String gene ) {
+		try {
+			//	skipping empty genes
+			if( gene.length() == 0 )
+				return;
+			
+			int activatingBit = v.contains(gene) ? 1 : 0;
+			
+			this.datOutput.write( String.format(NEW_VERTEX_GENE, activatingBit) );
 		} catch (IOException e) {
 			throw new RuntimeException( IO_EXCEPTION_ERROR );
 		}
