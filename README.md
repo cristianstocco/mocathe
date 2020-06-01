@@ -29,8 +29,10 @@ This section is developed and the improvement is about the reduction of the comp
 It has been applied **HashTables** and **BreadthFirstSearch** in order to reduce the computation time.
 Before, the upper-bound complexity was:
 
-$$T(G=[V,E]) = |V| &middot; k &middot; h &middot; [|E| + k &middot; h]$$
+T(G=[V,E]) = |V| &middot; k &middot; h &middot; (|E| + k &middot; h)
 
 Now, the complexity has being reduced to:
 
-$$T(G=[V,E]) = |V| &middot; \log_2 |V| &middot; k &middot; h &middot; + |E|$$
+T(G=[V,E]) = |V| &middot; log |V| &middot; k &middot; h &middot; + |E|
+
+With _k_ the total number of genes and _h_ the number of genes in the formula F.
