@@ -33,6 +33,6 @@ T(G=[V,E]) = |V| &middot; k &middot; h &middot; (|E| + k &middot; h)
 
 Now, the complexity has being reduced to:
 
-T(G=[V,E]) = |V| &middot; log |V| &middot; k &middot; h &middot; + |E|
+T(G=[V,E]) = |V| &middot; log |V| &middot; k &middot; h + |E|
 
 With _k_ the total number of genes and _h_ the number of genes in the formula F.
