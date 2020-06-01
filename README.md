@@ -28,6 +28,9 @@ with:
 This section is developed and the improvement is about the reduction of the computational complexity for the _DNA Repair Therapy_.
 It has been applied **HashTables** and **BreadthFirstSearch** in order to reduce the computation time.
 Before, the upper-bound complexity was:
+
 $$T(G=[V,E]) = |V| &middot; k &middot; h &middot; [|E| + k &middot; h]$$
+
 Now, the complexity has being reduced to:
-$$T(G=[V,E]) = |V| &middot; \log_2 |V| &middot; k &middot; h &middot; + |E|
+
+$$T(G=[V,E]) = |V| &middot; \log_2 |V| &middot; k &middot; h &middot; + |E|$$
